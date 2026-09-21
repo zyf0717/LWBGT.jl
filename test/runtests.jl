@@ -56,22 +56,18 @@ end
     @test calculate_batch(()) == Result[]
 end
 
-if haskey(ENV, "LWBGT_LIBRARY")
-    @testset "native FFI" begin
-        result = calculate(SINGAPORE)
-        @test result.status == 0
-        @test reinterpret(UInt32, result.wbgt_c) == 0x42020259
+@testset "native FFI" begin
+    result = calculate(SINGAPORE)
+    @test result.status == 0
+    @test reinterpret(UInt32, result.wbgt_c) == 0x42020259
 
-        batch = calculate_batch((SINGAPORE, SOLVER_FAILURE))
-        @test batch[1] == result
-        @test batch[2].status == -1
-        @test batch[2].globe_temperature_c == -9999.0f0
-        @test calculate([SINGAPORE]) == [result]
+    batch = calculate_batch((SINGAPORE, SOLVER_FAILURE))
+    @test batch[1] == result
+    @test batch[2].status == -1
+    @test batch[2].globe_temperature_c == -9999.0f0
+    @test calculate([SINGAPORE]) == [result]
 
-        @test reinterpret(UInt32, esat(273.15)) == 0x40c45e95
-        @test reinterpret(UInt32, esat(273.15, 1)) == 0x40c459a5
-        @test esat(273.15; phase=1) == esat(273.15, 1)
-    end
-else
-    @info "Skipping native integration tests; LWBGT_LIBRARY is not set"
+    @test reinterpret(UInt32, esat(273.15)) == 0x40c45e95
+    @test reinterpret(UInt32, esat(273.15, 1)) == 0x40c459a5
+    @test esat(273.15; phase=1) == esat(273.15, 1)
 end

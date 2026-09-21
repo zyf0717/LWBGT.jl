@@ -31,19 +31,7 @@ results = calculate_batch([weather, weather])
 println(esat(273.15; phase=0))
 ```
 
-## Native library
-
-Until `lwbgt_jll` is available, install or build the `lwbgt` shared library and
-either place it on the platform library search path or set `LWBGT_LIBRARY` to
-its absolute path before the first calculation:
-
-```sh
-export LWBGT_LIBRARY=/absolute/path/to/liblwbgt.so
-```
-
-The equivalent filenames are `liblwbgt.dylib` on macOS and `lwbgt.dll` on
-Windows. Library loading is lazy, so constructing records and calculating an
-empty batch do not require the shared library.
+The native library is installed automatically through `lwbgt_jll`.
 
 The native batch call is serial. Independent Julia tasks may call the package
 concurrently because the kernel has no mutable calculation state and each call
