@@ -33,7 +33,7 @@ end
 
 Calculate all `Input` records in one serial native batch call while preserving
 their order. The input records are not mutated. An empty iterable returns an
-empty result without loading the native library.
+empty result without calling the native kernel.
 """
 function calculate_batch(records)
     inputs = collect(Input, records)
@@ -59,7 +59,7 @@ end
     esat(temperature_k[, phase=0]) -> Float32
     esat(temperature_k; phase=0) -> Float32
 
-Return the native saturation vapour pressure for a temperature in kelvin.
+Return the native saturation vapour pressure in hPa for a temperature in kelvin.
 `phase == 0` selects liquid water and `phase == 1` selects ice. Use Julia
 broadcasting, `esat.(temperatures)`, for arrays.
 """
