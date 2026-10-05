@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Julia ${{ matrix.julia }} / ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            julia: '1.10'
+          - os: ubuntu-24.04
+            julia: '1'
+          - os: macos-15
+            julia: '1'
+          - os: windows-2022
+            julia: '1'
+    runs-on: ${{ matrix.os }}
+    env:
+      JULIA_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v6
+      - uses: julia-actions/setup-julia@v3
+        with:
+          version: ${{ matrix.julia }}
+          arch: default
+      - name: Test published JLL
+        run: julia --startup-file=no --project=. -e 'using Pkg; Pkg.instantiate(); Pkg.test()'
+      - name: Check out native test fixtures
+        if: runner.os == 'Linux' && matrix.julia == '1'
+        uses: actions/checkout@v6
+        with:
+          repository: zyf0717/lwbgt
+          # Source revision used by the lwbgt_jll v1.1.0 recipe.
+          ref: b6c49eff1d34738ae40f1d6b51a62cc3a5d0e83d
+          path: native
+      - name: Compare Julia with C consumers of the JLL
+        if: runner.os == 'Linux' && matrix.julia == '1'
+        run: julia --startup-file=no --project=. test/corpus.jl native

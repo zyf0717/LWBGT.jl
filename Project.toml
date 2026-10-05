@@ -4,7 +4,7 @@ authors = ["Yifei Zheng <zyf0717@gmail.com>"]
 version = "0.1.0"
 
 [deps]
-Libdl = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
+lwbgt_jll = "cf665c29-16db-5973-80e9-eb7e043c22cf"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
@@ -13,6 +13,6 @@ Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 test = ["Test"]
 
 [compat]
-Libdl = "1"
 Test = "1"
 julia = "1.10"
+lwbgt_jll = "1.1.0"

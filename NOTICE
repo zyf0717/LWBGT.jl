@@ -1,0 +1,8 @@
+LWBGT.jl
+Copyright 2026 Yifei Zheng. Project-authored work is licensed under Apache-2.0.
+
+The lwbgt_jll dependency provides a modified Liljegren WBGT v1.1 kernel,
+Copyright 2008 UChicago Argonne, LLC, distributed under its original terms.
+
+This product includes software produced by UChicago Argonne, LLC
+under Contract No. DE-AC02-06CH11357 with the Department of Energy.
