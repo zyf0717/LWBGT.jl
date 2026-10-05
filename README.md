@@ -24,6 +24,24 @@ After registration, use `Pkg.add("LWBGT")`. The native library is installed
 automatically through `lwbgt_jll` (v1.1.0 or later in the 1.x series); no C
 compiler or manual library configuration is needed.
 
+## Input assumptions
+
+When some inputs are unavailable, use explicit, recorded assumptions. The
+library does not fill in defaults automatically.
+
+| Field | Suggested assumption |
+|---|---|
+| `pressure_hpa` | Prefer an estimate from site elevation. `1013.25` hPa is a sea-level screening assumption. |
+| `wind_height_m` | Use `10` only when the source specifies wind measured at 10 m; otherwise use instrument metadata. |
+| `vertical_temperature_difference_c` | `1` assumes a nighttime inversion. Only negative versus nonnegative matters. |
+| `urban` | Use `0` for rural or `1` for urban. If unknown, calculate both and retain the higher WBGT for screening. |
+| `averaging_minutes` | Use the source averaging interval; `0` is appropriate only for instantaneous or already centered observations. |
+
+Air temperature, humidity, wind speed, and daytime solar radiation have no
+general fallback. See the
+[input guide](https://github.com/zyf0717/lwbgt/blob/main/docs/INPUTS.md) for units,
+timestamp conventions, and when these assumptions affect the calculation.
+
 ## Usage
 
 ```julia
@@ -56,50 +74,6 @@ The native batch call is serial. Independent Julia tasks may call the package
 concurrently because the kernel has no mutable calculation state and each call
 uses separate buffers.
 
-## Testing
-
-```sh
-julia --threads=2 --project=. -e 'using Pkg; Pkg.instantiate(); Pkg.test()'
-```
-
-CI tests Julia 1.10 on Linux and current stable Julia on Linux, macOS ARM64,
-and Windows. Tests cover native loading, ABI layouts, scalar/batch consistency,
-input preservation, rejected inputs, non-finite weather, and concurrent calls.
-
-The Linux corpus check compares every output field and status with independent
-C scalar probes linked to the **same installed JLL**: 35,976 WBGT cases, 64
-invalid-weather cases, and 1,682 water/ice saturation-pressure cases. CI pins
-the native fixtures to `b6c49eff1d34738ae40f1d6b51a62cc3a5d0e83d`, the source
-revision used by `lwbgt_jll v1.1.0+0`. To reproduce with that native checkout,
-Python 3.10+ and a C compiler on Linux:
-
-```sh
-julia --project=. test/corpus.jl /path/to/lwbgt
-```
-
-These checks require bitwise equality between callers of the same library.
-Golden smoke tests allow small platform math-library differences. Comparison
-with the retained original kernel is maintained in
-[`lwbgt`](https://github.com/zyf0717/lwbgt/blob/main/tests/BASELINE.md).
-
-## Releases
-
-The Julia package and native kernel have independent versions. For v0.1.0:
-
-1. Merge the release changes and require passing CI on `main`.
-2. Confirm [Registrator](https://github.com/apps/juliaregistrator) is enabled
-   for this repository, then comment `@JuliaRegistrator register` on the exact
-   release commit. The version comes from `Project.toml`.
-3. After the General registration merges, the TagBot workflow creates the tag
-   and GitHub release. Keep workflow changes separate from the registered
-   release commit: GitHub restricts TagBot's default token from tagging commits
-   that modify workflows. See [TagBot troubleshooting](https://github.com/JuliaRegistries/TagBot#commits-that-modify-workflow-files).
-
 ## License
 
-The Julia wrapper is licensed under [Apache-2.0](LICENSE). The native library
-includes the modified Argonne kernel under its
-[original terms](LicenseRef-UChicago-Argonne-WBGT-1.1.txt); see [NOTICE](NOTICE).
-
-This product includes software produced by UChicago Argonne, LLC
-under Contract No. DE-AC02-06CH11357 with the Department of Energy.
+This Julia wrapper is licensed under [Apache-2.0](LICENSE).
