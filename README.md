@@ -10,19 +10,22 @@ record, `calculate_batch` submits an entire collection in one native call, and
 `esat` exposes saturation vapour pressure. Field names encode their units. The
 package does not validate, clamp, convert, or replace solver failures.
 
+See also the [Python](https://pypi.org/project/lwbgt/),
+[R](https://doi.org/10.32614/CRAN.package.lwbgt),
+[Swift](https://github.com/zyf0717/lwbgt#swiftpm), and
+[C](https://github.com/zyf0717/lwbgt#native-c) versions.
+
 ## Installation
 
-Requires Julia 1.10 or later. Until the first General registration, install from
-the repository:
+Requires Julia 1.10 or later.
 
 ```julia
 using Pkg
-Pkg.add(url="https://github.com/zyf0717/LWBGT.jl")
+Pkg.add("LWBGT")
 ```
 
-After registration, use `Pkg.add("LWBGT")`. The native library is installed
-automatically through `lwbgt_jll` (v1.1.0 or later in the 1.x series); no C
-compiler or manual library configuration is needed.
+The native library is installed automatically through `lwbgt_jll`; no C compiler
+or manual configuration is needed.
 
 ## Input assumptions
 
