@@ -1,5 +1,10 @@
 # LWBGT.jl
 
+[![CI](https://github.com/zyf0717/LWBGT.jl/actions/workflows/ci.yml/badge.svg?branch=main&event=push)](https://github.com/zyf0717/LWBGT.jl/actions/workflows/ci.yml)
+[![Julia ≥1.10](https://img.shields.io/badge/Julia-1.10%2B-9558B2?logo=julia)](Project.toml)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
+[![Julia General: registered](https://img.shields.io/badge/Julia_General-registered-9558B2)](https://github.com/JuliaRegistries/General/tree/master/L/LWBGT)
+
 Thin Julia binding to the stable FFI v1 interface of the C library
 [`lwbgt`](https://github.com/zyf0717/lwbgt), the reference-compatible
 Liljegren outdoor wet bulb globe temperature kernel.
